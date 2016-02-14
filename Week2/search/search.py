@@ -62,9 +62,33 @@ class SearchProblem:
         util.raiseNotDefined()
 
 class Node:
-  pass
 
-def treesearch(problem, frontier=[]):
+  def __init__(self, state, action=None, step_cost=0, parent=None, path=[]):
+    self.state = state
+    self.action = action
+    self.step_cost = step_cost
+    self.parent = parent
+    self.path = []
+
+  def __repr__(self):
+    return "<node: %s>" %(self.state)
+
+  def path(self):
+    
+    x, result = self, [self]
+    
+    while x.parent:
+      result.append(x.parent)
+      x = x.parent
+    result.reverse()  
+    return result
+
+  def expand(self, problem):
+    return [Node(state, action, step_cost, self) \
+      for (state, action, step_cost) in problem.getSuccessors(self.state)]
+
+# tree_search needs to be updated to conform to graph_search below
+def tree_search(problem, frontier=[]):
     state = problem.getStartState()
     path = []
     node = (state, path)
@@ -78,7 +102,7 @@ def treesearch(problem, frontier=[]):
             frontier.push(successor)
     return None
 
-def graphsearch(problem, frontier=[]):
+def graph_search(problem, frontier=[]):
     explored = {}
     state = problem.getStartState()
     path = []
@@ -90,11 +114,14 @@ def graphsearch(problem, frontier=[]):
             return path
         if state not in explored:
             explored[state] = True
-            for (successor, action, cost) in problem.getSuccessors(state):
-              newstate = successor
-              newpath = path + [action]
-              node = (newstate, newpath)
-              frontier.push(node)
+            for newnode in problem.getSuccessors(state):
+              (successor, action, cost) = newnode
+              if successor not in explored: #and successor not in frontier:
+                #print successor in explored
+                newstate = successor
+                newpath = path + [action]
+                node = (newstate, newpath)
+                frontier.push(node)
     return None
 
 """
@@ -135,7 +162,7 @@ def depthFirstSearch(problem):
     #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
     
-    return graphsearch(problem, util.Stack())
+    return graph_search(problem, util.Stack())
 
     util.raiseNotDefined()
 
@@ -143,7 +170,7 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
 
-    return graphsearch(problem, util.Queue())
+    return graph_search(problem, util.Queue())
 
     util.raiseNotDefined()
 
