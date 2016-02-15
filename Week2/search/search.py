@@ -68,7 +68,7 @@ class Node:
     self.action = action
     self.step_cost = step_cost
     self.parent = parent
-    self.path = []
+    self.path = path
 
   def __repr__(self):
     return "<node: %s>" %(self.state)
@@ -104,24 +104,27 @@ def tree_search(problem, frontier=[]):
 
 def graph_search(problem, frontier=[]):
     explored = {}
-    state = problem.getStartState()
-    path = []
-    node = (state, path)
+    #state = problem.getStartState()
+    #path = []
+    #node = (state, path)
+    node = Node(problem.getStartState())
     frontier.push(node)
     while frontier:
-        node = (state, path) = frontier.pop()
-        if problem.isGoalState(state):
-            return path
-        if state not in explored:
-            explored[state] = True
-            for newnode in problem.getSuccessors(state):
-              (successor, action, cost) = newnode
-              if successor not in explored: #and successor not in frontier:
+        #node = (state, path) = frontier.pop()
+        node = frontier.pop()
+        if problem.isGoalState(node.state):
+            return node.path
+        if node.state not in explored:
+            explored[node.state] = True
+            for successor in problem.getSuccessors(node.state):
+              (state, action, cost) = successor
+              if state not in explored: #and successor not in frontier:
                 #print successor in explored
-                newstate = successor
-                newpath = path + [action]
-                node = (newstate, newpath)
-                frontier.push(node)
+                #newstate = successorstate
+                #newpath = node.path + [action]
+                #node = (newstate, newpath)
+                newnode = Node(state, action, cost, node, node.path + [action])
+                frontier.push(newnode)
     return None
 
 """
