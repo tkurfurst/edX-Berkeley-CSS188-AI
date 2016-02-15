@@ -63,10 +63,11 @@ class SearchProblem:
 
 class Node:
 
-  def __init__(self, state, action=None, step_cost=0, parent=None, path=[]):
+  def __init__(self, state, action=None, step_cost=0, total_cost=0, parent=None, path=[]):
     self.state = state
     self.action = action
     self.step_cost = step_cost
+    self.total_cost = total_cost
     self.parent = parent
     self.path = path
 
@@ -102,6 +103,7 @@ def tree_search(problem, frontier=[]):
             frontier.push(successor)
     return None
 
+# review PriorityQueue and PriorityQueuewithFunction
 def graph_search(problem, frontier=[]):
     explored = {}
     #state = problem.getStartState()
@@ -123,7 +125,7 @@ def graph_search(problem, frontier=[]):
                 #newstate = successorstate
                 #newpath = node.path + [action]
                 #node = (newstate, newpath)
-                newnode = Node(state, action, cost, node, node.path + [action])
+                newnode = Node(state, action, cost, total_cost=node.total_cost+cost, parent=node, path=node.path + [action])
                 frontier.push(newnode)
     return None
 
@@ -180,6 +182,9 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+
+    return graph_search(problem, util.PriorityQueueWithFunction(lambda node: node.total_cost))
+    
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -200,8 +205,6 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
-
- 
 
 
 
