@@ -256,8 +256,22 @@ print graphsearch(p)
 
 
 
+def solution(node):
+    """
+    Returns a list of actions, following parent pointers.
+    """
+    if node.parent == None:
+        return []
+    ls = solution(node.parent)
+    ls.extend([node.action])
 
+import random
 
+def randseq(length, low, high):
+    return [random.randint(low, high) for i in range(length)]
+
+for i in range(500000):
+    randseq(4, 0, 9)
 
 
 

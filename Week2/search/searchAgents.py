@@ -262,6 +262,12 @@ def euclideanHeuristic(position, problem, info={}):
     xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
 
+### HELPER CODE 
+def tupledict(t): return {k: v for (k,v) in t}
+
+def dicttuple(d): return tuple(d.items())
+### HELPER CODE 
+
 #####################################################
 # This portion is incomplete.  Time to write code!  #
 #####################################################
@@ -288,20 +294,43 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        
+        """ fix hash problem by converting:
+            
+            tuple to dict:  dict   = {k: v for (k,v) in tuple} for membership checks
+            
+                def tupledict(t): return {k: v for (k,v) in t}
+            
+            dict to tuple:  tuple  = tuple(dict.items()) for state storage
+                
+                def dicttuple(d): return tuple(d.items())
+        """
+        visitedCorners = {corner: False for corner in self.corners}
+        visitedCornersTuple = dicttuple(visitedCorners)
+        self.visited = visitedCornersTuple
+        self.start = (self.startingPosition, self.visited) 
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
+        "COMPLETED*** YOUR CODE HERE ***"
+        
+        return self.start
+        
         util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
+        "COMPLETED*** YOUR CODE HERE ***"
+        
+        currentPosition, visitedCornersTuple = state
+        visitedCorners = tupledict(visitedCornersTuple)
+        return all([visitedCorners[x] == True for x in self.corners])
+        
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -323,9 +352,24 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
+            
+            "COMPLETED*** YOUR CODE HERE ***"
 
-            "*** YOUR CODE HERE ***"
+            currentPosition, visitedCornersTuple = state
+            visitedCorners = tupledict(visitedCornersTuple)
+            x,y = currentPosition
 
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            nextPosition = (nextx, nexty)
+            
+            if not self.walls[nextx][nexty]:
+                if nextPosition in self.corners: # was if currentPosition in ...
+                    visited = visitedCorners
+                    visited[nextPosition] = True
+                    visitedCornersTuple = dicttuple(visited)
+                    #visitedCorners[currentPosition] = True
+                successors.append((  ((nextx, nexty), visitedCornersTuple), action, 1))
         self._expanded += 1 # DO NOT CHANGE
         return successors
 

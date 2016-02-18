@@ -63,6 +63,7 @@ class SearchProblem:
 
 class Node:
 
+  # ** REFACTOR ** to exclude optional attributes
   def __init__(self, state, action=None, step_cost=0, total_cost=0, parent=None, path=[]):
     self.state = state
     self.action = action
@@ -84,9 +85,18 @@ class Node:
     result.reverse()  
     return result
 
+  # ** REFACTOR ** for appropiate attributes and incorporate update in node for total_cost (see rhwang on Github)   
   def expand(self, problem):
     return [Node(state, action, step_cost, self) \
       for (state, action, step_cost) in problem.getSuccessors(self.state)]
+  
+  # ** COMPLETE **
+  def solution(node):
+    """
+    Returns a list of actions, following parent pointers
+    
+    """
+    pass
 
 # tree_search needs to be updated to conform to graph_search below
 def tree_search(problem, frontier=[]):
