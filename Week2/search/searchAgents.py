@@ -585,3 +585,4 @@ def mazeDistance(point1, point2, gameState):
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
     return len(search.bfs(prob))
 
+# testing addition of git branch on branchtest
