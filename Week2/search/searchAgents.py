@@ -586,3 +586,4 @@ def mazeDistance(point1, point2, gameState):
     return len(search.bfs(prob))
 
 # testing addition of git branch on branchtest
+# variation of second line change
