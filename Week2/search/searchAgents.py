@@ -523,10 +523,10 @@ def foodHeuristic(state, problem):
     if positionsToExplore:
         
         # Alternative #2 - very slow but finds solution to hard problem expanding 4,137 nodes in 29.2 secs (vs 9,551 in Alternative #1)
-        #return max( [mazeDistance(position, (px, py), problem.startingGameState) for (px, py) in positionsToExplore] )
+        return max( [mazeDistance(position, (px, py), problem.startingGameState) for (px, py) in positionsToExplore] )
         
         # Alternative #1 - fast but expands 9,551 nodes in 2.6 secs (vs 4,137 in Alternative #2)
-        return scaleFactor * max( [abs(x - px) + abs(y - py) for (px, py) in positionsToExplore] )
+        #return scaleFactor * max( [abs(x - px) + abs(y - py) for (px, py) in positionsToExplore] )
         
         # Alternative #0 - null heuristic expands 16,688 nodes
         #return 0
