@@ -517,7 +517,22 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    (x, y) = position
+    scaleFactor = 1.0
+    positionsToExplore = [(px, py) for (px, py) in foodGrid.asList() if foodGrid[px][py] == True]
+    if positionsToExplore:
+        
+        # Alternative #2 - very slow but finds solution to hard problem expanding 4,137 nodes in 29.2 secs (vs 9,551 in Alternative #1)
+        #return max( [mazeDistance(position, (px, py), problem.startingGameState) for (px, py) in positionsToExplore] )
+        
+        # Alternative #1 - fast but expands 9,551 nodes in 2.6 secs (vs 4,137 in Alternative #2)
+        return scaleFactor * max( [abs(x - px) + abs(y - py) for (px, py) in positionsToExplore] )
+        
+        # Alternative #0 - null heuristic expands 16,688 nodes
+        #return 0
+    else:
+        return 0
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
