@@ -539,6 +539,8 @@ class ClosestDotSearchAgent(SearchAgent):
     def registerInitialState(self, state):
         self.actions = []
         currentState = state
+        # added timing parameters below: starttime = time.time()
+        starttime = time.time()
         while(currentState.getFood().count() > 0):
             nextPathSegment = self.findPathToClosestDot(currentState) # The missing piece
             self.actions += nextPathSegment
@@ -549,7 +551,10 @@ class ClosestDotSearchAgent(SearchAgent):
                     raise Exception, 'findPathToClosestDot returned an illegal move: %s!\n%s' % t
                 currentState = currentState.generateSuccessor(0, action)
         self.actionIndex = 0
-        print 'Path found with cost %d.' % len(self.actions)
+        # added timing parameters below: print('Path found with total cost of %d in %.1f seconds' % (len(self.actions), time.time() - starttime))
+        print('Path found with total cost of %d in %.1f seconds' % (len(self.actions), time.time() - starttime))
+        #print 'Path found with cost %d.' % len(self.actions)
+
 
     def findPathToClosestDot(self, gameState):
         """
@@ -563,6 +568,9 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        
+        return search.bfs(problem)
+        
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -599,6 +607,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
+
+        return self.food[x][y] == True
+
         util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
