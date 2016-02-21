@@ -404,7 +404,26 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+
+    currentPosition, visitedCornersTuple = state
+    (px, py) = currentPosition
+    visitedCorners = tupledict(visitedCornersTuple)
+    cornersToExplore = [corner for corner in corners if visitedCorners[corner] == False]
+    if cornersToExplore:
+        return max( [abs(px - cx) + abs(py - cy) for (cx, cy) in cornersToExplore] )
+    else:
+        return 0
+    """
+    if cornersToCheck:
+        x, y = pt = max(corners)
+        #return ((xy1[0] - pt[0]) ** 2 + (xy1[1] - pt[1]) ** 2) ** 0.5
+        return 0
+        return (abs(xy1[0] - x) + abs(xy1[1] - y)) # for (x,y) in cornersToCheck])
+    else:
+        return 0
+
+    #return 0 # Default to trivial solution
+    """
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
